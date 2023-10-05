@@ -5,10 +5,13 @@ import { setUserAction } from "./action/user";
 import { message } from "antd";
 import { SET_FORM } from "./user";
 class Form extends Component {
-  formRef = createRef();
   handleChangeForm = (event) => {
     let { value, name } = event.target;
     let user = { ...this.props.user, [name]: value };
+    this.props.handleSetForm(user);
+  };
+  resetForm = () => {
+    let user = { ...this.props.user, name: "", account: "", password: "" };
     this.props.handleSetForm(user);
   };
   handleAddUser = () => {
@@ -20,7 +23,7 @@ class Form extends Component {
       .then((res) => {
         console.log(res);
         this.props.handleSetUser();
-        this.formRef.current.reset();
+        this.resetForm();
         message.success("Thêm thành công");
       })
       .catch((err) => {
@@ -36,6 +39,7 @@ class Form extends Component {
       .then((res) => {
         console.log("🚀 ~ file: Form.js:33 ~ Form ~ .then ~ res:", res);
         this.props.handleSetUser();
+        this.resetForm();
         message.success("cập nhật thành công");
       })
       .catch((err) => {
@@ -45,7 +49,7 @@ class Form extends Component {
   render() {
     return (
       <div>
-        <form className="form-inline" ref={this.formRef}>
+        <form className="form-inline">
           <input
             onChange={this.handleChangeForm}
             value={this.props.user.name}
